@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Updated import
 
-import Home from '/views/Home';
+import Home from './views/Home';
 import FaceDetection from './views/FaceDetection';
 
 import './App.css';
