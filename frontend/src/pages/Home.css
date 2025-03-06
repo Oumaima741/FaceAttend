@@ -1,0 +1,485 @@
+* {
+  font-family: "Montserrat", sans-serif; /* Utilisation de la police de caractères Roboto Rounded */
+}
+.section1 {
+  background-image: url("../images/ba.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: calc(100vh - 200px);
+  margin-top: -130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.section1 h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: light_blue;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.section1 h2 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #00fffb;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.cta-button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #4c51bf;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #434190;
+}
+.section2 {
+  display: flex;
+  flex-wrap: wrap; /* Permet aux solutions de passer à la ligne lorsque l'espace est insuffisant */
+  justify-content: space-around;
+  margin: 20px;
+}
+.solutions {
+  width: calc(33.33% - 20px);
+  margin: 10px; /* Ajoutez une marge autour de chaque solution */
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column; /* Affiche le contenu de la solution en colonne */
+  justify-content: center;
+  align-items: center;
+}
+.solutions:hover {
+  transform: translateY(-5px);
+}
+
+.solutions-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.solutions-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333; /* Couleur de texte plus foncée */
+  margin-bottom: 10px;
+}
+
+.solutions-description {
+  color: #666; /* Couleur de texte plus foncée */
+}
+.section3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+}
+
+.section3 > div:first-child {
+  flex: 1;
+  margin-right: 20px;
+}
+.section3 > div:first-child img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  display: block;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+
+.section3 > div:last-child {
+  flex: 2;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.section3 h2 {
+  color: #2563eb;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.section3 p {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.section3 blockquote {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 10px;
+  border-left: 4px solid #2563eb;
+  padding-left: 10px;
+}
+
+.section3 blockquote:before {
+  content: '"';
+  font-size: 2rem;
+  color: #2563eb;
+  margin-right: 10px;
+}
+
+.section3 blockquote:after {
+  content: '"';
+  font-size: 2rem;
+  color: #2563eb;
+  margin-left: 10px;
+}
+.section4 {
+  padding: 50px 0;
+  background-image: linear-gradient(to right, #e0eaf1, #ffffff);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.section-description {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+.section6 {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.how-it-works {
+  flex: 1;
+}
+
+.how-it-works h2 {
+  color: #2563eb;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.how-it-works ul {
+  list-style: none;
+  padding: 0;
+}
+
+.how-it-works li {
+  margin-bottom: 10px;
+}
+
+.how-it-works h3 {
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.how-it-works p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.video {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.video iframe {
+  width: 100%;
+  height: 400px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.section5 {
+  text-align: center;
+  padding: 50px 0;
+}
+
+.section5 h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.section5 p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.team-members,
+.supervisors {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.team-member,
+.supervisor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-right: 60px;
+  margin-left: 60px;
+}
+
+.team-member h3,
+.supervisor h3 {
+  font-size: 1.2rem;
+  margin-top: 5px;
+  color: #333;
+}
+
+.team-member img,
+.supervisor img {
+  width: 200px; /* Ajustez la taille selon vos préférences */
+  height: 200px; /* Ajustez également la hauteur si nécessaire */
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.team-member img:hover,
+.supervisor img:hover {
+  transform: scale(1.1);
+}
+
+.school-logo {
+  margin-top: 30px; /* Réduire l'espacement du haut */
+  display: flex;
+  justify-content: center; /* Aligner horizontalement */
+}
+.school-logo img {
+  width: 300px; /* Ajuster la largeur du logo */
+  height: auto; /* Garder le ratio hauteur-largeur */
+
+  justify-content: center;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+#get-in-touch {
+  background-color: #f9f9f9;
+  padding: 50px 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  margin-top: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .section1 {
+    text-align: center;
+    margin-top: -85px;
+    padding-top: 70px;
+  }
+
+  .section2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .solutions {
+    width: 100%;
+    max-width: 300px;
+    margin: 20px;
+  }
+
+  .solutions-description {
+    font-size: 14px;
+  }
+
+  .section4 {
+    text-align: center;
+  }
+
+  .team-members {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .team-member {
+    width: 100%;
+    max-width: 200px;
+    margin: 20px;
+  }
+
+  .supervisors {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .supervisor {
+    width: 100%;
+    max-width: 200px;
+    margin: 20px;
+  }
+
+  .contact-form {
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+  }
+  .section6 {
+    display: block;
+  }
+  .responsive-image {
+    visibility: hidden;
+  }
+  .section3 > div:first-child {
+    flex: 0;
+  }
+
+  .section3 > div:last-child {
+    flex: 1;
+    width: 100%;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .section2 {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .solutions {
+    width: 30%;
+    max-width: 300px;
+  }
+
+  .video {
+    width: 48%;
+  }
+
+  .section4 {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: auto;
+  }
+
+  .team-member,
+  .supervisor {
+    width: 30%;
+    max-width: 200px;
+  }
+
+  .contact-form {
+    width: 40%;
+    max-width: 400px;
+  }
+}

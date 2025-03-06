@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Updated import
-
-import Home from './views/Home';
-import FaceDetection from './views/FaceDetection';
-
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
+import DashboardLayout from './pages/DashboardLayout'; 
+import Home from './pages/Home';
 import './App.css';
 
 class App extends Component {
@@ -13,9 +11,8 @@ class App extends Component {
         <Router>
           <div className="route">
             <Routes>
-              {/* Updated syntax with 'element' prop */}
               <Route path="/" element={<Home />} />
-              <Route path="/detection" element={<FaceDetection />} />
+              <Route path="/DashboardLayout" element={<DashboardLayout />} />
             </Routes>
           </div>
         </Router>
