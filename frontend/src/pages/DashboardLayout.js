@@ -38,6 +38,7 @@ const DashboardLayout = () => {
         <div className="main-content">
           {content === 'dashboard' && <Dashboard />}
           {content === 'FaceDetection' && <FaceDetection />}
+          
         </div>
       </div>
     </div>
