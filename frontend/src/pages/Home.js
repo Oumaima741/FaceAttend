@@ -10,8 +10,9 @@ function Home() {
   const navigate = useNavigate(); 
 
   const handleClick = () => {
-    navigate('/DashboardLayout'); 
+    navigate('/login');
   };
+  
   return (
     <div className='content'>
       <Navbar />

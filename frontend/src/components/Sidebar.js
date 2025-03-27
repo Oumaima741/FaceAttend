@@ -1,39 +1,42 @@
-import React, { useState } from 'react';
-import { FaRoute , FaSignOutAlt, FaUserTie, FaUsers, FaCog, FaQuestionCircle, FaHome, FaUser, FaChartBar, FaCar, FaDatabase } from 'react-icons/fa';
+import React from 'react';
+import { FaUserTie, FaUsers, FaQuestionCircle, FaHome } from 'react-icons/fa';
 import './Sidebar.css';
-import { useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ activeItem, onItemClick }) => {
-
   return (
     <div className="sidebar">
       <ul className="sidebar-list">
-        <li onClick={() => onItemClick('dashboard')}>
+        <li className={`sidebar-item ${activeItem === "dashboard" ? "active" : ""}`} 
+            onClick={() => onItemClick("dashboard")}>
           <div className="sidebar-link">
             <FaHome className="sidebar-icon" />
             <span className="sidebar-text">Tableau de bord</span>
           </div>
         </li>
-        <li>
+
+        <li className={`sidebar-item ${activeItem === "Attendence" ? "active" : ""}`} 
+            onClick={() => onItemClick("Attendence")}>
           <div className="sidebar-link">
-            <FaCar className="sidebar-icon" />
+            <FaUsers className="sidebar-icon" />
             <span className="sidebar-text">Gestion des étudiants</span>
           </div>
         </li>
-        <li onClick={() => onItemClick('FaceDetection')}>
+
+        <li className={`sidebar-item ${activeItem === "FaceDetection" ? "active" : ""}`} 
+            onClick={() => onItemClick("FaceDetection")}>
           <div className="sidebar-link">
             <FaUserTie className="sidebar-icon" />
             <span className="sidebar-text">Détection faciale</span>
           </div>
         </li>
 
-        <li onClick={() => onItemClick('Support')}>
+        <li className={`sidebar-item ${activeItem === "Support" ? "active" : ""}`} 
+            onClick={() => onItemClick("Support")}>
           <div className="sidebar-link">
             <FaQuestionCircle className="sidebar-icon" />
             <span className="sidebar-text">Assistance & Aide</span>
           </div>
         </li>
-
       </ul>
     </div>
   );

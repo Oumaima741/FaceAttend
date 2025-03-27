@@ -1,1 +1,94 @@
+/* ✅ Centrer tout le contenu */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 90px;
+    width: 100%;
+}
 
+/* ✅ Centrer le titre */
+h2 {
+    text-align: center;
+    width: 100%;
+    margin-top: 0;
+    font-size: 28px;
+}
+
+/* ✅ Cartes statistiques bien alignées */
+.stats-cards {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 80%;
+}
+
+.card {
+    flex: 1;
+    padding: 25px;
+    color: white;
+    border-radius: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    min-width: 200px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* ✅ Nouvelles couleurs douces */
+.pink {
+    background: #FFB6C1; /* Rose clair */
+}
+
+.blue {
+    background: #87CEFA; /* Bleu ciel */
+}
+
+.blue-light {
+    background: #ADD8E6; /* Bleu très clair */
+}
+
+/* ✅ Tableau des présences bien centré */
+.table-container {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 90%;
+    text-align: center;
+}
+
+/* ✅ Espacement et bordures des cellules */
+th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+/* ✅ Alignement des graphiques */
+.charts-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 80%;
+    margin-top: 20px;
+}
+
+.chart {
+    flex: 1;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}

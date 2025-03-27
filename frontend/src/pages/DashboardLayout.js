@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar'; 
 import Navbar from '../components/Navbar';
+import Attendence from './Attendence';
 import Dashboard from './Dashboard';
 import './DashboardLayout.css';
 import FaceDetection from './FaceDetection';
@@ -38,6 +39,7 @@ const DashboardLayout = () => {
         <div className="main-content">
           {content === 'dashboard' && <Dashboard />}
           {content === 'FaceDetection' && <FaceDetection />}
+          {content === 'Attendence' && <Attendence/>}
           
         </div>
       </div>
