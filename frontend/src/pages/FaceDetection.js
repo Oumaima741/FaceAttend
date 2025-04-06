@@ -3,52 +3,49 @@ import * as faceapi from "@vladmandic/face-api";
 import AuthIdle from "../assets/images/auth-idle.svg";
 import AuthFace from "../assets/images/auth-face.svg";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import "./FaceDetection.css"
+import "./FaceDetection.css";
+
 function FaceDetection() {
-  const [tempAccount, setTempAccount] = useState("");
   const [localUserStream, setLocalUserStream] = useState(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [faceApiLoaded, setFaceApiLoaded] = useState(false);
-  const [loginResult, setLoginResult] = useState("PENDING");
+  const [PresenceResult, setPresenceResult] = useState("PENDING");
   const [imageError, setImageError] = useState(false);
   const [counter, setCounter] = useState(5);
-  const [labeledFaceDescriptors, setLabeledFaceDescriptors] = useState({});
+  const [labeledFaceDescriptors, setLabeledFaceDescriptors] = useState(null);
   const videoRef = useRef();
   const canvasRef = useRef();
   const faceApiIntervalRef = useRef();
   const videoWidth = 640;
   const videoHeight = 360;
-
+  const descriptorsLoaded = useRef(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-
-
   const loadModels = async () => {
-    // const uri = import.meta.env.DEV ? "/models" : "/react-face-auth/models";
     const uri = "/models";
-
     await faceapi.nets.ssdMobilenetv1.loadFromUri(uri);
     await faceapi.nets.faceLandmark68Net.loadFromUri(uri);
     await faceapi.nets.faceRecognitionNet.loadFromUri(uri);
   };
 
   useEffect(() => {
-    setTempAccount(location?.state?.account);
+    loadModels()
+      .then(async () => {
+        const descriptors = await loadLabeledImages();
+        if (descriptors && descriptors.length > 0) {
+          setLabeledFaceDescriptors(descriptors);
+        }
+      })
+      .then(() => setModelsLoaded(true))
+      .catch(error => {
+        console.error("Error loading models:", error);
+        setImageError(true);
+      });
   }, []);
-  useEffect(() => {
-   
-      loadModels()
-        .then(async () => {
-          const labeledFaceDescriptors = await loadLabeledImages();
-          setLabeledFaceDescriptors(labeledFaceDescriptors);
-        })
-        .then(() => setModelsLoaded(true));
-    
-  }, [tempAccount]);
 
   useEffect(() => {
-    if (loginResult === "SUCCESS") {
+    if (PresenceResult === "SUCCESS") {
       const counterInterval = setInterval(() => {
         setCounter((counter) => counter - 1);
       }, 1000);
@@ -61,17 +58,14 @@ function FaceDetection() {
         });
         clearInterval(counterInterval);
         clearInterval(faceApiIntervalRef.current);
-        localStorage.setItem(
-          "faceAuth",
-          JSON.stringify({ status: true, account: tempAccount })
-        );
-        navigate("/protected", { replace: true });
+        localStorage.setItem("faceAuth", JSON.stringify({ status: true }));
+        navigate("/success"); // Redirect to success page
       }
 
       return () => clearInterval(counterInterval);
     }
     setCounter(5);
-  }, [loginResult, counter]);
+  }, [PresenceResult, counter]);
 
   const getLocalUserVideo = async () => {
     navigator.mediaDevices
@@ -82,87 +76,163 @@ function FaceDetection() {
       })
       .catch((err) => {
         console.error("error:", err);
+        setImageError(true);
       });
   };
 
   const scanFace = async () => {
-    faceapi.matchDimensions(canvasRef.current, videoRef.current);
-    const faceApiInterval = setInterval(async () => {
-      const detections = await faceapi
-        .detectAllFaces(videoRef.current)
-        .withFaceLandmarks()
-        .withFaceDescriptors();
-      const resizedDetections = faceapi.resizeResults(detections, {
-        width: videoWidth,
-        height: videoHeight,
+    if (!descriptorsLoaded.current) {
+      console.log("Attente des descripteurs...");
+      await new Promise(resolve => {
+        const check = () => {
+          if (descriptorsLoaded.current) resolve();
+          else setTimeout(check, 100);
+        };
+        check();
       });
+    }
 
-      
-      if (!canvasRef.current) {
-        return;
-      }
+    console.log("Descripteurs disponibles:", labeledFaceDescriptors);
+    
+    if (!labeledFaceDescriptors) {
+      console.error("Les descripteurs ne sont toujours pas chargés");
+      return;
+    }
 
-      canvasRef.current
-        .getContext("2d")
-        .clearRect(0, 0, videoWidth, videoHeight);
-      faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
-      faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+    faceapi.matchDimensions(canvasRef.current, videoRef.current);
 
-      
+    const faceApiInterval = setInterval(async () => {
+      if (!videoRef.current) return;
 
-      if (!faceApiLoaded) {
-        setFaceApiLoaded(true);
+      try {
+        const detections = await faceapi
+          .detectAllFaces(videoRef.current)
+          .withFaceLandmarks()
+          .withFaceDescriptors();
+
+        const resizedDetections = faceapi.resizeResults(detections, {
+          width: videoWidth,
+          height: videoHeight,
+        });
+
+        const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
+        const results = resizedDetections.map((d) =>
+          faceMatcher.findBestMatch(d.descriptor)
+        );
+
+        if (!canvasRef.current) return;
+
+        canvasRef.current
+          .getContext("2d")
+          .clearRect(0, 0, videoWidth, videoHeight);
+        faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
+        faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
+
+        if (results.length > 0 && results[0].label !== "unknown") {
+          setPresenceResult("SUCCESS");
+        } else {
+          setPresenceResult("FAILED");
+        }
+
+        if (!faceApiLoaded) setFaceApiLoaded(true);
+      } catch (error) {
+        console.error("Face detection error:", error);
       }
     }, 1000 / 15);
+
     faceApiIntervalRef.current = faceApiInterval;
   };
 
   async function loadLabeledImages() {
-    if (!tempAccount) {
+    try {
+      console.log("Début du chargement des images...");
+      const response = await fetch("http://localhost:5000/api/getAllImages");
+      
+      if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+      
+      const students = await response.json();
+      console.log("Données reçues:", students);
+  
+      // Vérification approfondie des images
+      if (!students || students.length === 0) {
+        throw new Error("Aucune donnée d'étudiant reçue");
+      }
+  
+      const validDescriptors = [];
+      
+      for (const student of students) {
+        try {
+          if (!student.photo) {
+            console.warn(`Étudiant ${student.id} n'a pas de photo`);
+            continue;
+          }
+  
+          // Vérification du format de l'image
+          let imageSrc = student.photo;
+          if (!imageSrc.startsWith('data:image/')) {
+            imageSrc = `data:image/jpeg;base64,${imageSrc}`;
+          }
+  
+          console.log(`Traitement de l'étudiant ${student.id}...`);
+          
+          // Création de l'élément image
+          const img = await createImageElement(imageSrc);
+          
+          // Détection du visage
+          const detection = await faceapi
+            .detectSingleFace(img)
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+  
+          if (detection) {
+            validDescriptors.push(detection.descriptor);
+            console.log(`Visage détecté pour l'étudiant ${student.id}`);
+          } else {
+            console.warn(`Aucun visage détecté pour l'étudiant ${student.id}`);
+          }
+        } catch (error) {
+          console.error(`Erreur sur l'étudiant ${student.id}:`, error);
+        }
+      }
+  
+      if (validDescriptors.length === 0) {
+        throw new Error("Aucun descripteur facial valide n'a pu être créé");
+      }
+  
+      console.log(`${validDescriptors.length} descripteurs créés avec succès`);
+
+      const descriptors = new faceapi.LabeledFaceDescriptors("knownFaces", validDescriptors);
+      setLabeledFaceDescriptors(descriptors);
+      descriptorsLoaded.current = true; // Marquer comme chargé
+      console.log("Descripteurs enregistrés dans l'état");
+      
+      return new faceapi.LabeledFaceDescriptors("knownFaces", validDescriptors);
+      
+
+
+
+    } catch (error) {
+      console.error("Erreur fatale:", error);
+      setImageError(true);
       return null;
     }
-    const descriptions = [];
-
-    let img;
-
-    try {
-      const imgPath =
-        tempAccount?.type === "CUSTOM"
-          ? tempAccount.picture
-          : // : import.meta.env.DEV
-            // ? `/temp-accounts/${tempAccount.picture}`
-            // : `/react-face-auth/temp-accounts/${tempAccount.picture}`;
-            `/temp-accounts/${tempAccount.picture}`;
-
-      img = await faceapi.fetchImage(imgPath);
-    } catch {
-      setImageError(true);
-      return;
-    }
-
-    const detections = await faceapi
-      .detectSingleFace(img)
-      .withFaceLandmarks()
-      .withFaceDescriptor();
-
-    if (detections) {
-      descriptions.push(detections.descriptor);
-    }
-
-    return new faceapi.LabeledFaceDescriptors(tempAccount.id, descriptions);
+  }
+  
+  // Fonction utilitaire pour créer un élément image
+  async function createImageElement(src) {
+    return new Promise((resolve, reject) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Échec du chargement de l\'image'));
+    });
   }
 
   if (imageError) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-[24px] max-w-[840px] mx-auto">
-        <h2 className="text-center text-3xl font-extrabold tracking-tight text-rose-700 sm:text-4xl">
-          <span className="block">
-            Upps! There is no profile picture associated with this account.
-          </span>
-        </h2>
-        <span className="block mt-4">
-          Please contact administration for registration or try again later.
-        </span>
+      <div className="error-message">
+        <h2>Error loading face recognition data</h2>
+        <p>Please try again later or contact support.</p>
       </div>
     );
   }
@@ -172,7 +242,7 @@ function FaceDetection() {
       {!localUserStream && !modelsLoaded && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           <span className="block">
-            You're Attempting to Log In With Your Face.
+            You're Attempting to Mark your presence With Your Face.
           </span>
           <span className="block text-indigo-600 mt-2">Loading Models...</span>
         </h2>
@@ -180,11 +250,11 @@ function FaceDetection() {
       {!localUserStream && modelsLoaded && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           <span className="block text-indigo-600 mt-2">
-            Please Recognize Your Face to Completely Log In.
+            Please Recognize Your Face to Completely marke.
           </span>
         </h2>
       )}
-      {localUserStream && loginResult === "SUCCESS" && (
+      {localUserStream && PresenceResult === "SUCCESS" && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           <span className="block text-indigo-600 mt-2">
             We've successfully recognize your face!
@@ -194,14 +264,14 @@ function FaceDetection() {
           </span>
         </h2>
       )}
-      {localUserStream && loginResult === "FAILED" && (
+      {localUserStream && PresenceResult === "FAILED" && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-rose-700 sm:text-4xl">
           <span className="block mt-[56px]">
             Upps! We did not recognize your face.
           </span>
         </h2>
       )}
-      {localUserStream && !faceApiLoaded && loginResult === "PENDING" && (
+      {localUserStream && !faceApiLoaded && PresenceResult === "PENDING" && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           <span className="block mt-[56px]">Scanning Face...</span>
         </h2>

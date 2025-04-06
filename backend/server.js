@@ -4,8 +4,29 @@ const cors = require("cors");
 
 const app = express();
 
+const express = require("express");
+const cors = require("cors");
+const mysql = require("mysql");
+
+
+// Configuration CORS précise
+const corsOptions = {
+  origin: 'http://localhost:3000', // Autorise uniquement votre frontend
+  credentials: true, // Important pour les requêtes avec credentials
+  optionsSuccessStatus: 200 // Pour les navigateurs anciens
+};
+
+// Appliquez CORS à toutes les routes
+app.use(cors(corsOptions));
+
+// Gestion explicite des requêtes OPTIONS (preflight)
+app.options('*', cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
 app.use(express.json());
-app.use(cors());
+
 
 // Connexion à MySQL
 const db = mysql.createConnection({
@@ -23,19 +44,30 @@ db.connect((err) => {
   console.log("✅ Connecté à la base de données MySQL");
 });
 
-// Route pour ajouter un étudiant
-app.post("/students", (req, res) => {
-    const { id, name, filiere, niveau, email, photo } = req.body;
-    const sql = "INSERT INTO students (id, name, filiere, niveau, email, photo) VALUES (?, ?, ?, ?, ?, ?)";
-    db.query(sql, [id, name, filiere, niveau, email, photo], (err, result) => {
-      if (err) {
-        console.error("❌ Erreur lors de l'insertion :", err);
-        return res.status(500).send("Erreur serveur");
-      }
-      res.status(200).send("Étudiant ajouté !");
-    });
-  });
+// Get all student images
+app.get("/api/getAllImages", (req, res) => {
+  const sql = "SELECT id, photo FROM students WHERE photo IS NOT NULL AND photo != ''";
   
+  req.db.query(sql, (err, results) => {  // Changed from db.query to req.db.query
+    if (err) {
+      console.error("Error fetching student images:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    const validStudents = results.map(student => {
+      // Ensure the photo has proper base64 prefix
+      let photo = student.photo;
+      if (!photo.startsWith('data:image/')) {
+        photo = `data:image/jpeg;base64,${photo}`;
+      }
+      return { ...student, photo };
+    });
+
+    res.json(validStudents);
+  });
+});
+
+
 app.get("/students", (req, res) => {
     const sql = "SELECT * FROM students";
     db.query(sql, (err, results) => {
