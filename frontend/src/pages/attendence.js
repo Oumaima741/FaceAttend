@@ -69,7 +69,25 @@ const Attendance = () => {
         axios.post("http://localhost:5000/students", studentToSave)
           .then(() => {
             fetchStudents();
+
+            const presenceData = {
+              student_id: newStudent.id,          // Assure-toi que c’est bien l’id étudiant
+              date: "2025-04-14 08:05:00",
+              status: "Absent"                   // ou un autre statut selon ta logique
+            };
+  
+            axios.post("http://localhost:5000/presence", presenceData)
+              .then(() => {
+                fetchStudents();
+              })
+              .catch((err) => {
+                console.error("Erreur lors de l’ajout de la présence :", err);
+                alert("Erreur d’enregistrement de la présence !");
+              });
+  
           })
+            
+      
           .catch((err) => {
             console.error("Erreur lors de l’ajout :", err);
             alert("Erreur d’enregistrement !");

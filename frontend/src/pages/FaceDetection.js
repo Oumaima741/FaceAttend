@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import * as faceapi from "@vladmandic/face-api";
 import AuthIdle from "../assets/images/auth-idle.svg";
 import AuthFace from "../assets/images/auth-face.svg";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import {useLocation} from "react-router-dom";
 import "./FaceDetection.css";
-
+import axios from "axios";
 function FaceDetection() {
   const [localUserStream, setLocalUserStream] = useState(null);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [faceApiLoaded, setFaceApiLoaded] = useState(false);
+  const [recognizedStudentId, setRecognizedStudentId] = useState(null);
   const [PresenceResult, setPresenceResult] = useState("PENDING");
   const [imageError, setImageError] = useState(false);
   const [counter, setCounter] = useState(5);
@@ -20,7 +21,6 @@ function FaceDetection() {
   const videoHeight = 360;
   const descriptorsLoaded = useRef(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
   const loadModels = async () => {
     const uri = "/models";
@@ -43,29 +43,48 @@ function FaceDetection() {
         setImageError(true);
       });
   }, []);
-
+  const [showSuccess, setShowSuccess] = useState(false);
   useEffect(() => {
     if (PresenceResult === "SUCCESS") {
       const counterInterval = setInterval(() => {
-        setCounter((counter) => counter - 1);
+        setCounter(prev => prev - 1);
       }, 1000);
-
+  
+      const updateAndRedirect = async () => {
+        try {
+          if (!recognizedStudentId) {
+            throw new Error("ID étudiant non reconnu");
+          }
+  
+          // Vérifier à nouveau au cas où
+          const check = await axios.get(`http://localhost:5000/api/checkPresence?student_id=${recognizedStudentId}`);
+          
+          if (!check.data.alreadyPresent) {
+            await axios.post("http://localhost:5000/api/updatePresence", {
+              student_id: recognizedStudentId,
+              status: "present"
+            });
+            setShowSuccess(true);
+            setTimeout(() => {
+              setShowSuccess(false);
+            }, 3000);
+          } else {
+            setPresenceResult("ALREADY_PRESENT");
+          }
+        } catch (error) {
+          console.error("Erreur:", error);
+        } finally {
+          clearInterval(counterInterval);
+        }
+      };
+  
       if (counter === 0) {
-        videoRef.current.pause();
-        videoRef.current.srcObject = null;
-        localUserStream.getTracks().forEach((track) => {
-          track.stop();
-        });
-        clearInterval(counterInterval);
-        clearInterval(faceApiIntervalRef.current);
-        localStorage.setItem("faceAuth", JSON.stringify({ status: true }));
-        navigate("/success"); // Redirect to success page
+        updateAndRedirect();
       }
-
+  
       return () => clearInterval(counterInterval);
     }
-    setCounter(5);
-  }, [PresenceResult, counter]);
+  }, [PresenceResult, counter, recognizedStudentId]);
 
   const getLocalUserVideo = async () => {
     navigator.mediaDevices
@@ -91,55 +110,71 @@ function FaceDetection() {
         check();
       });
     }
-
+  
     console.log("Descripteurs disponibles:", labeledFaceDescriptors);
     
     if (!labeledFaceDescriptors) {
       console.error("Les descripteurs ne sont toujours pas chargés");
       return;
     }
-
+  
     faceapi.matchDimensions(canvasRef.current, videoRef.current);
-
+  
     const faceApiInterval = setInterval(async () => {
       if (!videoRef.current) return;
-
+  
       try {
         const detections = await faceapi
           .detectAllFaces(videoRef.current)
           .withFaceLandmarks()
           .withFaceDescriptors();
-
+  
         const resizedDetections = faceapi.resizeResults(detections, {
           width: videoWidth,
           height: videoHeight,
         });
-
+  
         const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors);
         const results = resizedDetections.map((d) =>
           faceMatcher.findBestMatch(d.descriptor)
         );
-
+  
         if (!canvasRef.current) return;
-
+  
         canvasRef.current
           .getContext("2d")
           .clearRect(0, 0, videoWidth, videoHeight);
         faceapi.draw.drawDetections(canvasRef.current, resizedDetections);
         faceapi.draw.drawFaceLandmarks(canvasRef.current, resizedDetections);
-
-        if (results.length > 0 && results[0].label !== "unknown") {
-          setPresenceResult("SUCCESS");
+  
+        if (results.length > 0) {
+          const bestMatch = results[0];
+          if (bestMatch.label !== "unknown") {
+            const studentId = bestMatch.label;
+            
+            // Vérifier d'abord si déjà présent
+            const response = await axios.get(`http://localhost:5000/api/checkPresence?student_id=${studentId}`);
+            
+            if (response.data.alreadyPresent) {
+              setPresenceResult("ALREADY_PRESENT");
+              setRecognizedStudentId(studentId);
+            } else {
+              console.log("ID étudiant reconnu:", studentId);
+              setRecognizedStudentId(studentId);
+              setPresenceResult("SUCCESS");
+            }
+            return;
+          }
         } else {
           setPresenceResult("FAILED");
         }
-
+  
         if (!faceApiLoaded) setFaceApiLoaded(true);
       } catch (error) {
         console.error("Face detection error:", error);
       }
     }, 1000 / 15);
-
+  
     faceApiIntervalRef.current = faceApiInterval;
   };
 
@@ -153,12 +188,11 @@ function FaceDetection() {
       const students = await response.json();
       console.log("Données reçues:", students);
   
-      // Vérification approfondie des images
       if (!students || students.length === 0) {
         throw new Error("Aucune donnée d'étudiant reçue");
       }
   
-      const validDescriptors = [];
+      const labeledDescriptors = [];
       
       for (const student of students) {
         try {
@@ -167,50 +201,37 @@ function FaceDetection() {
             continue;
           }
   
-          // Vérification du format de l'image
           let imageSrc = student.photo;
           if (!imageSrc.startsWith('data:image/')) {
-            imageSrc = `data:image/jpeg;base64,${imageSrc}`;
+            imageSrc = `data:image/jpeg ; base64,${imageSrc}`;
           }
   
           console.log(`Traitement de l'étudiant ${student.id}...`);
           
-          // Création de l'élément image
           const img = await createImageElement(imageSrc);
-          
-          // Détection du visage
           const detection = await faceapi
             .detectSingleFace(img)
             .withFaceLandmarks()
             .withFaceDescriptor();
   
           if (detection) {
-            validDescriptors.push(detection.descriptor);
+            labeledDescriptors.push(
+              new faceapi.LabeledFaceDescriptors(
+                student.id.toString(), // Utilisez l'ID étudiant comme label
+                [detection.descriptor]
+              )
+            );
             console.log(`Visage détecté pour l'étudiant ${student.id}`);
-          } else {
-            console.warn(`Aucun visage détecté pour l'étudiant ${student.id}`);
           }
         } catch (error) {
           console.error(`Erreur sur l'étudiant ${student.id}:`, error);
         }
       }
   
-      if (validDescriptors.length === 0) {
-        throw new Error("Aucun descripteur facial valide n'a pu être créé");
-      }
+      descriptorsLoaded.current = true;
+      console.log("Descripteurs chargés avec succès");
+      return labeledDescriptors;
   
-      console.log(`${validDescriptors.length} descripteurs créés avec succès`);
-
-      const descriptors = new faceapi.LabeledFaceDescriptors("knownFaces", validDescriptors);
-      setLabeledFaceDescriptors(descriptors);
-      descriptorsLoaded.current = true; // Marquer comme chargé
-      console.log("Descripteurs enregistrés dans l'état");
-      
-      return new faceapi.LabeledFaceDescriptors("knownFaces", validDescriptors);
-      
-
-
-
     } catch (error) {
       console.error("Erreur fatale:", error);
       setImageError(true);
@@ -231,18 +252,27 @@ function FaceDetection() {
   if (imageError) {
     return (
       <div className="error-message">
-        <h2>Error loading face recognition data</h2>
-        <p>Please try again later or contact support.</p>
+        <h2>Erreur lors du chargement des données </h2>
+        <p>Veuillez réessayer plus tard ou contacter le support technique.</p>
       </div>
     );
   }
-
+  const SuccessAnimation = () => (
+    <div className="success-animation">
+      <svg className="checkmark" viewBox="0 0 52 52">
+        <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+        <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+      </svg>
+      <p className="success-text">Présence validée !</p>
+    </div>
+  );
+  
   return (
     <div className="h-full flex flex-col items-center justify-center gap-[24px] max-w-[720px] mx-auto">
       {!localUserStream && !modelsLoaded && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           <span className="block">
-            You're Attempting to Mark your presence With Your Face.
+          Vous essayez de marquer votre présence par reconnaissance faciale.
           </span>
           <span className="block text-indigo-600 mt-2">Loading Models...</span>
         </h2>
@@ -250,24 +280,24 @@ function FaceDetection() {
       {!localUserStream && modelsLoaded && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           <span className="block text-indigo-600 mt-2">
-            Please Recognize Your Face to Completely marke.
+          Identifiez votre visage pour valider votre présence.
           </span>
         </h2>
       )}
       {localUserStream && PresenceResult === "SUCCESS" && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           <span className="block text-indigo-600 mt-2">
-            We've successfully recognize your face!
+          Reconnaissance faciale réussie !
           </span>
           <span className="block text-indigo-600 mt-2">
-            Please stay {counter} more seconds...
+          Restez en place encore {counter} secondes ...
           </span>
         </h2>
       )}
       {localUserStream && PresenceResult === "FAILED" && (
         <h2 className="text-center text-3xl font-extrabold tracking-tight text-rose-700 sm:text-4xl">
           <span className="block mt-[56px]">
-            Upps! We did not recognize your face.
+           Oups ! Nous n'avons pas reconnu votre visage.
           </span>
         </h2>
       )}
@@ -351,6 +381,24 @@ function FaceDetection() {
             )}
           </>
         )}
+
+
+
+{showSuccess && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="bg-white p-8 rounded-lg">
+      <SuccessAnimation />
+    </div>
+  </div>
+)}
+
+{localUserStream && PresenceResult === "ALREADY_PRESENT" && (
+  <h2 className="text-center text-3xl font-extrabold tracking-tight text-yellow-600 sm:text-4xl">
+    <span className="block mt-[56px]">
+      Vous êtes déjà marqué présent aujourd'hui.
+    </span>
+  </h2>
+)}
       </div>
     </div>
   );

@@ -4,9 +4,6 @@ const cors = require("cors");
 
 const app = express();
 
-const express = require("express");
-const cors = require("cors");
-const mysql = require("mysql");
 
 
 // Configuration CORS précise
@@ -44,11 +41,38 @@ db.connect((err) => {
   console.log("✅ Connecté à la base de données MySQL");
 });
 
+
+app.post("/students", (req, res) => {
+  const { id, name, email, filiere, niveau, photo } = req.body;
+
+  const sql = "INSERT INTO students (id, name, email, filiere, niveau, photo) VALUES (?, ?, ?, ?, ?, ?)";
+  db.query(sql, [id, name, email, filiere, niveau, photo], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de l'ajout de l'étudiant :", err);
+      return res.status(500).send("Erreur d'enregistrement de l'étudiant");
+    }
+    res.status(201).send("Étudiant enregistré avec succès");
+  });
+});
+
+
+app.post("/presence", (req, res) => {
+  const { student_id, date, status } = req.body;
+
+  const sql = "INSERT INTO presence (student_id, date, status) VALUES (?, ?, ?)";
+  db.query(sql, [student_id, date, status], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de l'ajout de la présence :", err);
+      return res.status(500).send("Erreur d'enregistrement de la présence");
+    }
+    res.status(201).send("Présence enregistrée avec succès");
+  });
+});
 // Get all student images
 app.get("/api/getAllImages", (req, res) => {
   const sql = "SELECT id, photo FROM students WHERE photo IS NOT NULL AND photo != ''";
   
-  req.db.query(sql, (err, results) => {  // Changed from db.query to req.db.query
+  db.query(sql, (err, results) => {  // Changed from db.query to req.db.query
     if (err) {
       console.error("Error fetching student images:", err);
       return res.status(500).json({ error: "Database error" });
@@ -88,6 +112,41 @@ app.get("/students", (req, res) => {
       }
       res.status(200).send("Étudiant supprimé !");
     });
+  });
+
+  app.post("/api/updatePresence", async (req, res) => {
+    const { student_id, status} = req.body;
+  
+    try {
+      const result = db.query(
+        `UPDATE presence SET status = ? WHERE student_id = ? `,
+        [status, student_id]
+      );
+      
+      res.json({ success: true, affectedRows: result.affectedRows });
+    } catch (error) {
+      console.error("Erreur SQL:", error);
+      res.status(500).json({ error: "Erreur serveur" });
+    }
+  });
+
+  app.get('/checkPresence', async (req, res) => {
+    try {
+      const { student_id } = req.query;
+      
+      // Vérifiez dans votre base de données
+      const today = new Date().toISOString().split('T')[0];
+      const existingPresence = await Presence.findOne({ 
+        where: { 
+          student_id,
+          date: today
+        }
+      });
+  
+      res.json({ alreadyPresent: !!existingPresence });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   });
   
 // Lancer le serveur
