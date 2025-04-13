@@ -18,8 +18,8 @@ function Home() {
       <Navbar />
       <div className="section1">
         <h2>OPTIMISEZ LE SUIVI DE PRÉSENCE & RENFORCEZ LA SÉCURITÉ</h2>
-        <h1 className="title">Simplifiez la Détection de Présence avec AttendTrack</h1>
-        <p className="description">AttendTrack offre une solution intuitive et efficace pour surveiller la présence en temps réel, gérer les accès et générer des rapports détaillés.</p>
+        <h1 className="title">Simplifiez la Détection de Présence avec FaceAttend</h1>
+        <p className="description">FaceAttend offre une solution intuitive et efficace pour surveiller la présence en temps réel, gérer les accès et générer des rapports détaillés.</p>
         <button className="cta-button" onClick={handleClick}>Commencer</button>
       </div>
       <div className='section2' id='section2'>
@@ -60,21 +60,21 @@ function Home() {
           <img src={image2} alt="" className="responsive-image"  />
         </div>
         <div>
-          <h2>Système de Gestion de Présence : AttendTrack</h2>
-          <p>Optimisez la gestion des effectifs et la sécurité avec AttendTrack. Simplifiez les opérations et améliorez l'efficacité.</p>
+          <h2>Système de Gestion de Présence : FaceAttend</h2>
+          <p>Optimisez la gestion des effectifs et la sécurité avec FaceAttend. Simplifiez les opérations et améliorez l'efficacité.</p>
           <blockquote>“Une solution fluide pour le suivi des présences et le contrôle d'accès”</blockquote>
           <p>
-            Que vous gériez un bureau, une école ou un site industriel, AttendTrack vous aide à surveiller les présences efficacement. Avec un suivi en temps réel, des rapports automatisés et un contrôle d'accès sécurisé, notre système garantit fiabilité et précision.
+            Que vous gériez un bureau, une école ou un site industriel, FaceAttend vous aide à surveiller les présences efficacement. Avec un suivi en temps réel, des rapports automatisés et un contrôle d'accès sécurisé, notre système garantit fiabilité et précision.
           </p>
         </div>
       </div>
       <div className="section6" id='section6'>
         <div className="how-it-works">
-          <h2>Comment fonctionne AttendTrack</h2>
+          <h2>Comment fonctionne FaceAttend</h2>
           <ul>
             <li>
               <h3>Inscription</h3>
-              <p>Créez votre compte AttendTrack et commencez à gérer la présence facilement.</p>
+              <p>Créez votre compte FaceAttend et commencez à gérer la présence facilement.</p>
             </li>
             <li>
               <h3>Configuration des Points d'Accès</h3>
@@ -100,7 +100,7 @@ function Home() {
           <div className="story-content">
             <h2 className="section-title">Notre Vision : Transformer la Gestion des Présences</h2>
             <p className="section-description">
-              AttendTrack est né du besoin d'une solution efficace et sécurisée pour la détection de présence. Notre équipe a développé un système innovant simplifiant le suivi des présences, garantissant fiabilité et conformité.
+            FaceAttend est né du besoin d'une solution efficace et sécurisée pour la détection de présence. Notre équipe a développé un système innovant simplifiant le suivi des présences, garantissant fiabilité et conformité.
             </p>
           </div>
         </div>
@@ -108,7 +108,7 @@ function Home() {
       <section id="get-in-touch">
         <div className="container">
           <h2>Optimisez votre Gestion de Présence dès Aujourd'hui</h2>
-          <p>Contactez-nous pour planifier une démonstration ou découvrir comment AttendTrack peut améliorer l'efficacité de votre organisation.</p>
+          <p>Contactez-nous pour planifier une démonstration ou découvrir comment FaceAttend peut améliorer l'efficacité de votre organisation.</p>
         </div>
         <form className="contact-form">
             <div className="form-group">
@@ -136,7 +136,7 @@ function Home() {
           <a href="#">Politique de Confidentialité</a>
         </div>
         <div className="copyright">
-          <p>© 2024 AttendTrack. Tous droits réservés.</p>
+          <p>© 2024 FaceAttend. Tous droits réservés.</p>
         </div>
       </footer>
     </div>

@@ -11,7 +11,7 @@ function Navbar({ }) {
   return (
     <div className="navbar-wrapper" >
       <nav className="navbar">
-        <div className="Logo"> Attendance </div>
+        <div className="Logo"> FaceAttend </div>
         <div className="menu-icon" >
           <FaBars />
          </div>
