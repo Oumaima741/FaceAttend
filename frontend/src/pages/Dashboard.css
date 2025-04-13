@@ -47,31 +47,31 @@ h2 {
 
 /* ✅ Nouvelles couleurs douces */
 .pink {
-    background: #FFB6C1; /* Rose clair */
+    background: #FFB6C1;
 }
 
 .blue {
-    background: #87CEFA; /* Bleu ciel */
+    background: #87CEFA;
 }
 
 .blue-light {
-    background: #ADD8E6; /* Bleu très clair */
+    background: #ADD8E6;
 }
 
 /* ✅ Tableau des présences bien centré */
 .table-container {
     background: white;
-    padding: 15px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-    width: 90%;
+    margin-top: 0px;
+    width: 80%; /* ✅ aligné avec les cartes et les graphiques */
     text-align: center;
 }
 
 /* ✅ Espacement et bordures des cellules */
 th, td {
-    padding: 8px;
+    padding: 40px;
     border-bottom: 1px solid #ddd;
     text-align: center;
 }
@@ -82,7 +82,7 @@ th, td {
     justify-content: center;
     gap: 20px;
     width: 80%;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .chart {
@@ -91,4 +91,71 @@ th, td {
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ Conteneur tableau + graphique étudiant */
+.table-and-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px; /* ✅ Écart normal */
+    width: 80%;
+    margin-top: 30px;
+}
+
+.selected-student-chart-side {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 550px; /* ✅ plus large */
+    min-height: 350px;
+}
+
+
+@media (max-width: 768px) {
+    .table-and-chart {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .table-container,
+    .selected-student-chart-side {
+        width: 100%;
+    }
+}
+
+/* ✅ Graphe animé en bas à droite */
+.floating-chart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    height: 300px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 999;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s ease-in-out;
+    pointer-events: none;
+}
+
+.floating-chart.visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.floating-chart canvas {
+    height: 200px !important;
+}
+
+@media (max-width: 768px) {
+    .floating-chart {
+        display: none;
+    }
 }
