@@ -74,13 +74,13 @@ const Dashboard = () => {
     ]
   };
 
-  // ✅ Graphe des absences par heure pour chaque jour
+
   const getStudentPresenceData = (studentName) => {
     const heures = ["09:00", "11:00", "14:00", "16:00"];
     const jours = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
     const colors = ["#F1948A", "#AED6F1", "#A9DFBF", "#F7DC6F", "#D7BDE2"];
 
-    // chaque dataset = un jour avec absences par heure
+   
     const datasets = jours.map((jour, index) => {
       const absences = heures.map(() => (Math.random() < 0.5 ? 0 : 2));
       return {
@@ -121,15 +121,15 @@ const Dashboard = () => {
 
       <div className="stats-cards">
         <div className="card pink">
-          <h3>{Math.floor((presents / total) * 100)}%</h3>
+          <h3 className="pourcentage">{Math.floor((presents / total) * 100)}%</h3>
           <p>Présents</p>
         </div>
         <div className="card blue-light">
-          <h3>{Math.floor((absents / total) * 100)}%</h3>
+          <h3 className="pourcentage">{Math.floor((absents / total) * 100)}%</h3>
           <p>Absents</p>
         </div>
         <div className="card blue">
-          <h3>{Math.floor((lates / total) * 100)}%</h3>
+          <h3 className="pourcentage">{Math.floor((lates / total) * 100)}%</h3>
           <p>Retardataires</p>
         </div>
       </div>
@@ -146,7 +146,7 @@ const Dashboard = () => {
       <div className="table-and-chart">
         <div className="table-container">
           <h3>Étudiants concernés</h3>
-          <table>
+          <table className="students-table">
             <thead>
               <tr>
                 <th>Nom</th>
