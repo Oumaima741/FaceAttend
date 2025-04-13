@@ -30,8 +30,8 @@ const Sidebar = ({ activeItem, onItemClick }) => {
           </div>
         </li>
 
-        <li className={`sidebar-item ${activeItem === "Support" ? "active" : ""}`} 
-            onClick={() => onItemClick("Support")}>
+        <li className={`sidebar-item ${activeItem === "Aid" ? "active" : ""}`} 
+            onClick={() => onItemClick("Aid")}>
           <div className="sidebar-link">
             <FaQuestionCircle className="sidebar-icon" />
             <span className="sidebar-text">Assistance & Aide</span>

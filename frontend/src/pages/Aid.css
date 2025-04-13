@@ -1,0 +1,111 @@
+/* Style général */
+.aid-container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 3rem;
+  font-family: "Arial", sans-serif;
+  color: #333;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2,
+h3,
+h4 {
+  color: #2c3e50;
+}
+
+a {
+  color: #2980b9;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Section Contact */
+.help-section {
+  margin-bottom: 2rem;
+}
+
+.help-section h2 {
+  font-size: 2rem;
+  color: #2980b9;
+  margin-bottom: 1rem;
+}
+
+.help-section p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.contact-form button {
+  padding: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.contact-form button:hover {
+  background-color: #2980b9;
+}
+
+/* Section FAQ */
+.faq-section {
+  margin-bottom: 3rem;
+}
+
+.faq-item {
+  margin-bottom: 1rem;
+}
+
+.faq-item h4 {
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #3498db;
+}
+
+.faq-item p {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-top: 0.5rem;
+}
+
+.faq-item h4:hover {
+  text-decoration: underline;
+}
+
+/* Section Contact Info */
+.contact-info {
+  margin-top: 2rem;
+}
+
+.contact-info h3 {
+  font-size: 1.5rem;
+  color: #2980b9;
+}
+
+.contact-info p {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 0.5rem;
+}
+
+.contact-info strong {
+  color: #2c3e50;
+}
