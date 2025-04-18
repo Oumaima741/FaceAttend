@@ -56,10 +56,6 @@ function FaceDetection() {
             throw new Error("ID étudiant non reconnu");
           }
   
-          // Vérifier à nouveau au cas où
-          const check = await axios.get(`http://localhost:5000/api/checkPresence?student_id=${recognizedStudentId}`);
-          
-          if (!check.data.alreadyPresent) {
             await axios.post("http://localhost:5000/api/updatePresence", {
               student_id: recognizedStudentId,
               status: "present"
@@ -68,9 +64,8 @@ function FaceDetection() {
             setTimeout(() => {
               setShowSuccess(false);
             }, 3000);
-          } else {
-            setPresenceResult("ALREADY_PRESENT");
-          }
+            
+          
         } catch (error) {
           console.error("Erreur:", error);
         } finally {
@@ -152,18 +147,11 @@ function FaceDetection() {
           if (bestMatch.label !== "unknown") {
             const studentId = bestMatch.label;
             
-            // Vérifier d'abord si déjà présent
-            const response = await axios.get(`http://localhost:5000/api/checkPresence?student_id=${studentId}`);
-            
-            if (response.data.alreadyPresent) {
-              setPresenceResult("ALREADY_PRESENT");
-              setRecognizedStudentId(studentId);
-            } else {
+           
               console.log("ID étudiant reconnu:", studentId);
               setRecognizedStudentId(studentId);
               setPresenceResult("SUCCESS");
-            }
-            return;
+            
           }
         } else {
           setPresenceResult("FAILED");
