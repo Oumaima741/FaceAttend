@@ -5,31 +5,27 @@ const cors = require("cors");
 const app = express();
 
 
-
-// Configuration CORS précise
 const corsOptions = {
-  origin: 'http://localhost:3000', // Autorise uniquement votre frontend
-  credentials: true, // Important pour les requêtes avec credentials
-  optionsSuccessStatus: 200 // Pour les navigateurs anciens
+  origin: 'http://localhost:3000', 
+  credentials: true, 
+  optionsSuccessStatus: 200 
 };
 
-// Appliquez CORS à toutes les routes
+
 app.use(cors(corsOptions));
 
-// Gestion explicite des requêtes OPTIONS (preflight)
 app.options('*', cors(corsOptions));
 
-// Handle preflight requests
+
 app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
 
-// Connexion à MySQL
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "", // change si nécessaire
+  password: "", 
   database: "attendance_db"
 });
 
@@ -68,18 +64,17 @@ app.post("/presence", (req, res) => {
     res.status(201).send("Présence enregistrée avec succès");
   });
 });
-// Get all student images
+
 app.get("/api/getAllImages", (req, res) => {
   const sql = "SELECT id, photo FROM students WHERE photo IS NOT NULL AND photo != ''";
   
-  db.query(sql, (err, results) => {  // Changed from db.query to req.db.query
+  db.query(sql, (err, results) => { 
     if (err) {
       console.error("Error fetching student images:", err);
       return res.status(500).json({ error: "Database error" });
     }
 
     const validStudents = results.map(student => {
-      // Ensure the photo has proper base64 prefix
       let photo = student.photo;
       if (!photo.startsWith('data:image/')) {
         photo = `data:image/jpeg;base64,${photo}`;
@@ -134,7 +129,6 @@ app.get("/students", (req, res) => {
     try {
       const { student_id } = req.query;
       
-      // Vérifiez dans votre base de données
       const today = new Date().toISOString().split('T')[0];
       const existingPresence = await Presence.findOne({ 
         where: { 
@@ -149,17 +143,14 @@ app.get("/students", (req, res) => {
     }
   });
   
-// Lancer le serveur
 app.listen(5000, () => {
   console.log("🚀 Serveur démarré sur http://localhost:5000");
 });
 const bcrypt = require("bcrypt");
 
-// Signup route
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
-  // Regex pour mot de passe fort (min 8 caractères, 1 maj, 1 min, 1 chiffre, 1 spé)
   const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   if (!strongPassword.test(password)) {
@@ -178,7 +169,6 @@ app.post("/signup", async (req, res) => {
   });
 });
 
-// Login route
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 

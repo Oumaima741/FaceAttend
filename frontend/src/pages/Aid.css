@@ -1,4 +1,3 @@
-/* Style général */
 .aid-container {
   width: 80%;
   margin: 0 auto;
@@ -25,7 +24,6 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Section Contact */
 .help-section {
   margin-bottom: 2rem;
 }
@@ -65,7 +63,6 @@ a:hover {
   background-color: #2980b9;
 }
 
-/* Section FAQ */
 .faq-section {
   margin-bottom: 3rem;
 }
@@ -90,7 +87,6 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Section Contact Info */
 .contact-info {
   margin-top: 2rem;
 }

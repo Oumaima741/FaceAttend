@@ -71,9 +71,9 @@ const Attendance = () => {
             fetchStudents();
 
             const presenceData = {
-              student_id: newStudent.id,          // Assure-toi que c’est bien l’id étudiant
+              student_id: newStudent.id,   
               date: "2025-04-14 08:05:00",
-              status: "Absent"                   // ou un autre statut selon ta logique
+              status: "Absent"               
             };
   
             axios.post("http://localhost:5000/presence", presenceData)

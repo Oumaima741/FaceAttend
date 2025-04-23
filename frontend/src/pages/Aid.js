@@ -11,7 +11,6 @@ const Aid = () => {
     q5: false,
   });
 
-  // Gestion du changement des champs du formulaire
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm({
@@ -20,7 +19,6 @@ const Aid = () => {
     });
   };
 
-  // Gestion de l'envoi du formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -35,7 +33,6 @@ const Aid = () => {
     setForm({ name: '', email: '', message: '' });
   };
 
-  // Toggle FAQ answers
   const toggleFaq = (question) => {
     setFaqAnswers({
       ...faqAnswers,

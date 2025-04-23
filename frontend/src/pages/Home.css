@@ -1,5 +1,5 @@
 * {
-  font-family: "Montserrat", sans-serif; /* Utilisation de la police de caractères Roboto Rounded */
+  font-family: "Montserrat", sans-serif;
 }
 .section1 {
   background-image: url("../images/ba.png");
@@ -58,13 +58,13 @@
 }
 .section2 {
   display: flex;
-  flex-wrap: wrap; /* Permet aux solutions de passer à la ligne lorsque l'espace est insuffisant */
+  flex-wrap: wrap;
   justify-content: space-around;
   margin: 20px;
 }
 .solutions {
   width: calc(33.33% - 20px);
-  margin: 10px; /* Ajoutez une marge autour de chaque solution */
+  margin: 10px;
   padding: 20px;
   background-color: #f4f4f4;
   border-radius: 10px;
@@ -72,7 +72,7 @@
   text-align: center;
   transition: transform 0.3s ease;
   display: flex;
-  flex-direction: column; /* Affiche le contenu de la solution en colonne */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -89,12 +89,12 @@
 .solutions-title {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333; /* Couleur de texte plus foncée */
+  color: #333;
   margin-bottom: 10px;
 }
 
 .solutions-description {
-  color: #666; /* Couleur de texte plus foncée */
+  color: #666;
 }
 .section3 {
   display: flex;
@@ -281,8 +281,8 @@
 
 .team-member img,
 .supervisor img {
-  width: 200px; /* Ajustez la taille selon vos préférences */
-  height: 200px; /* Ajustez également la hauteur si nécessaire */
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
@@ -294,13 +294,13 @@
 }
 
 .school-logo {
-  margin-top: 30px; /* Réduire l'espacement du haut */
+  margin-top: 30px;
   display: flex;
-  justify-content: center; /* Aligner horizontalement */
+  justify-content: center;
 }
 .school-logo img {
-  width: 300px; /* Ajuster la largeur du logo */
-  height: auto; /* Garder le ratio hauteur-largeur */
+  width: 300px;
+  height: auto;
 
   justify-content: center;
 }

@@ -205,7 +205,7 @@ function FaceDetection() {
           if (detection) {
             labeledDescriptors.push(
               new faceapi.LabeledFaceDescriptors(
-                student.id.toString(), // Utilisez l'ID étudiant comme label
+                student.id.toString(),
                 [detection.descriptor]
               )
             );
@@ -227,7 +227,6 @@ function FaceDetection() {
     }
   }
   
-  // Fonction utilitaire pour créer un élément image
   async function createImageElement(src) {
     return new Promise((resolve, reject) => {
       const img = document.createElement('img');

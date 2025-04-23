@@ -54,7 +54,6 @@
   font-size: 2.25rem;
 }
 
-/* Boutons */
 .scane-button {
   justify-content: center;
   width: 100%;
@@ -90,7 +89,6 @@
   width: 100%;
 }
 
-/* Animation de chargement */
 .loading-spinner {
   display: inline;
   margin-right: 8px;
@@ -110,7 +108,6 @@
     transform: rotate(360deg);
   }
 }
-/* Animation pour le message de succès */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -126,7 +123,6 @@
   animation: fadeIn 0.5s ease-out;
 }
 
-/* Style pour l'overlay */
 .modal-overlay {
   position: fixed;
   top: 0;

@@ -13,7 +13,7 @@ const Login = () => {
     try {
       const res = await axios.post('http://localhost:5000/login', { email, password });
       alert('Connexion réussie');
-      navigate('/DashboardLayout'); // Rediriger vers le dashboard
+      navigate('/DashboardLayout');
     } catch (err) {
       alert('Erreur de connexion');
     }

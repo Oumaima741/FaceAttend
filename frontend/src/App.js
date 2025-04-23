@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DashboardLayout from './pages/DashboardLayout'; 
 import Home from './pages/Home';
 import './App.css';
-import SignUp from "./pages/SignUp"; // 👈 Ajoute ceci
+import SignUp from "./pages/SignUp";
 import Login from "./pages/Login"; 
 class App extends Component {
   render() {
