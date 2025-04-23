@@ -50,12 +50,12 @@ L'application repose sur un backend Node.js connecté à une base de données My
 └── README.md
 ```
 ## 🚀 Lancer le projet localement
-1. Cloner le dépôt
+### 1. Cloner le dépôt
 ```
 git clone https://github.com/votre-utilisateur/faceattend.git
 ```
 
-2. Installer les dépendances
+### 2. Installer les dépendances
 ### Frontend
 ```
 cd ../frontend
@@ -142,12 +142,10 @@ Détection multiple par erreur	Ajout d’un seuil de distance faciale
 ##🐞 Bugs connus
 📷 Si plusieurs visages apparaissent dans la même frame, un mauvais mapping peut survenir.
 
-### 🔁 En cas de rafraîchissement fréquent, le modèle facial peut être ralenti temporairement.
+🔁 En cas de rafraîchissement fréquent, le modèle facial peut être ralenti temporairement.
 
 ### 🧩 Astuce : Gestion des versions de Node
 Si tu rencontres un problème d’incompatibilité avec npm run dev, installe une version compatible avec nvm :
-
-
 ### Si nvm n’est pas reconnu
 ### Télécharge-le :
 https://github.com/coreybutler/nvm-windows/releases
