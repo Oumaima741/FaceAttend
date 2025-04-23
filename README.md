@@ -56,6 +56,7 @@ git clone https://github.com/votre-utilisateur/faceattend.git
 ```
 
 2. Installer les dépendances
+Frontend
 ```
 cd ../frontend
 npm install
