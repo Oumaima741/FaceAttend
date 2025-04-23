@@ -34,15 +34,19 @@ L'application repose sur un backend Node.js connecté à une base de données My
 ## 🏗️ Structure du projet
 
 ```bash
-FaceAttend/
-├── client/           # Frontend React
-│   ├── src/
-│   ├── public/
-├── server/           # Backend Node.js
-│   ├── routes/
-│   ├── controllers/
-│   └── database/
-├── models/           # Modèles de données
+├── backend
+│   └── server.js          # API Express
+│   └── package.json
+├── frontend
+│   └── src
+│       ├── assets/images  # Photos des étudiants
+│       ├── components     # Composants UI (Camera, Table, etc.)
+│       ├── pages          # Pages (Login, Dashboard, Attendance)
+│       ├── App.js
+│       └── index.js
+├── public
+├── README.md
+# Modèles de données
 └── README.md
 ```
 ## 🚀 Lancer le projet localement
@@ -73,18 +77,50 @@ node server.js
 cd frontend
 npm start
 ```
+## 👨‍👩‍👧‍👦 Parcours utilisateur
+
+### - Accueil : Mise en avant des fonctionnalités clés + vision du projet
+
+### - Inscription : Formulaire simple pour créer un compte utilisateur
+
+### - Connexion : Redirection automatique après inscription
+
+### - Interface principale :
+
+ ### Sidebar intuitive pour naviguer entre :
+  
+  - Page d’aide : infos d’utilisation et contact support .
+  
+  - Gestion des étudiants .
+  
+  - Détection faciale .
+  
+  - Dashboard statistique .
+
 
 ## 🔍 Fonctionnalités
 
-Détection automatique de visage via webcam
+👤 Gestion des étudiants
+Ajouter, modifier, supprimer étudiants
 
-Reconnaissance faciale pour marquer la présence
+Enregistrement automatique dans la base de données
 
-Tableau de bord des présences (date, heure, identité)
+🎥 Reconnaissance faciale
+Chargement des modèles face-api.js
 
-Export CSV des données
+Détection en temps réel via webcam
 
-Système d’authentification utilisateur (admin/enseignants)
+Marquage automatique de présence si correspondance
+
+📊 Tableau de bord dynamique
+Vue d’ensemble des présences, absences, retards
+
+Détail hebdomadaire par étudiant
+
+Filtres par filière et niveau
+
+🆘 Aide & support
+Page dédiée avec explications et contact support
 
 ## 📦 Versions utilisées
 ```
