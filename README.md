@@ -66,7 +66,7 @@ npm install
 ### Terminal 1 (backend)
 ```
 cd backend
-npm start
+node server.js 
 ```
 ### Terminal 2 (frontend)
 ```
