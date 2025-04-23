@@ -4,7 +4,7 @@
 
 **FaceAttend** est une solution intelligente de gestion de la présence basée sur la reconnaissance faciale en temps réel. Ce projet vise à automatiser le suivi de présence dans un établissement scolaire ou une entreprise en utilisant la détection et la reconnaissance de visages via webcam.
 
-###'objectif est de :
+### l'objectif est de :
 - Éviter la fraude liée aux feuilles de présence manuelles.
 - Gagner du temps et simplifier le processus d’enregistrement.
 - Générer des rapports fiables et consultables à tout moment.
@@ -53,12 +53,12 @@ git clone https://github.com/votre-utilisateur/faceattend.git
 
 2. Installer les dépendances
 ```
-cd frontend
+cd ../frontend
 npm install
 ```
 Backend :
 ```
-cd ../client
+cd ../backend
 npm install
 ```
 ## 3. Démarrer le projet
@@ -73,7 +73,9 @@ npm start
 cd frontend
 npm start
 ```
+
 ## 🔍 Fonctionnalités
+
 Détection automatique de visage via webcam
 
 Reconnaissance faciale pour marquer la présence
@@ -94,6 +96,7 @@ Système d’authentification utilisateur (admin/enseignants)
   "axios": "^1.x"
 }
 ```
+
 ## 🧪 Défis techniques & solutions
 
 Performance de détection en direct	Utilisation de face-api.js avec des modèles allégés
@@ -102,16 +105,16 @@ Détection multiple par erreur	Ajout d’un seuil de distance faciale
 ##🐞 Bugs connus
 📷 Si plusieurs visages apparaissent dans la même frame, un mauvais mapping peut survenir.
 
-🔁 En cas de rafraîchissement fréquent, le modèle facial peut être ralenti temporairement.
+### 🔁 En cas de rafraîchissement fréquent, le modèle facial peut être ralenti temporairement.
 
-🧩 Astuce : Gestion des versions de Node
+### 🧩 Astuce : Gestion des versions de Node
 Si tu rencontres un problème d’incompatibilité avec npm run dev, installe une version compatible avec nvm :
 
 
-# Si nvm n’est pas reconnu
-# Télécharge-le :
+### Si nvm n’est pas reconnu
+### Télécharge-le :
 https://github.com/coreybutler/nvm-windows/releases
-# Puis relance ton terminal et fais :
+### Puis relance ton terminal et fais :
 ```
 nvm install 18.17.0
 nvm use 18.17.0
@@ -119,7 +122,7 @@ node -v  # doit afficher v18.17.0
 ```
 
 
-🔗 Liens utiles
+## 🔗 Liens utiles
 [ Présentation ](https://www.canva.com/design/DAGkmEx47I4/e9Ec03jDXiKu4SQH8jU66g/watch?utm_content=DAGkmEx47I4&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h90a265df78 )
 
 
